@@ -1,0 +1,104 @@
+{
+  "app-id": "com.github.laurent22.joplin",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "1.6",
+  "branch": "stable",
+  "sdk": "org.freedesktop.Sdk",
+  "base": "org.electronjs.Electron2.BaseApp",
+  "base-version": "stable",
+  "finish-args": [
+    "--share=ipc",
+    "--socket=x11",
+    "--socket=wayland",
+    "--share=network"
+  ],
+  "build-options" : {
+    "cflags": "-O2 -g",
+    "cxxflags": "-O2 -g",
+    "env": {
+      "NPM_CONFIG_LOGLEVEL": "info"
+    }
+  },
+  "modules": [
+    {
+      "name": "nodejs",
+      "cleanup": [
+        "/include",
+        "/share",
+        "/app/lib/node_modules/npm/changelogs",
+        "/app/lib/node_modules/npm/doc",
+        "/app/lib/node_modules/npm/html",
+        "/app/lib/node_modules/npm/man",
+        "/app/lib/node_modules/npm/scripts"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://nodejs.org/dist/latest-v10.x/node-v10.19.0.tar.gz",
+          "sha256": "db85b9992f1ec66629731d82f690987883dd2989abb4cc136eb65dd720b1bda8"
+        }
+      ]
+    },
+    {
+      "name": "yarn",
+      "buildsystem": "simple",
+      "build-commands": [
+        "mkdir -p /app/share/yarn",
+        "cp -a * /app/share/yarn/",
+        "ln -s /app/share/yarn/bin/yarn /app/bin/yarn",
+        "ln -s /app/share/yarn/bin/yarnpkg /app/bin/yarnpkg"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/yarnpkg/yarn/releases/download/v1.3.2/yarn-v1.3.2.tar.gz",
+          "sha256": "6cfe82e530ef0837212f13e45c1565ba53f5199eec2527b85ecbcd88bf26821d"
+        }
+      ]
+    },
+    {
+      "build-options" : {
+        "env": {
+          /* Need this for electron-download to find the cached electron binary */
+          "electron_config_cache": "/run/build/joplin/npm-cache"
+        }
+      },
+      "name": "joplin",
+      "buildsystem": "simple",
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/laurent22/joplin/archive/v1.0.193.tar.gz",
+          "sha256": "7852ccc25c6345c80222853878f0441cb3522741a0a2c5d641485f2fc9509d87",
+          "dest": "main"
+        },
+        "generated-sources.json",
+        {
+          "type": "script",
+          "dest-filename": "run.sh",
+          "commands": [ "/app/main/joplin" ]
+        }
+      ],
+      "build-commands": [
+        /* */
+        /* install modules */
+        "echo 'step 1 - install modules'",
+        "npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+        /* install modules in tools */
+        "echo 'step 2 - install tools'",
+        "npm install --prefix=main/Tools --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+        /* copy react to electron files */
+        "echo 'step 3 - copy electron'",
+        "cp -rv main/ReactNativeClient/lib/ main/ElectronClient/app/lib/", 
+        /* run typescript */
+        "pwd",
+        /* install Electron */
+        "echo 'step 5 - install electron'",
+        "npm install --prefix=main/ElectronClient/app --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+        "mkdir -p /app/main /app/bin",
+        "cp -ra main/ElectronClient/app/dist/linux-unpacked/* /app/main/",
+        "install run.sh /app/bin/"
+      ]
+    }
+  ]
+}
