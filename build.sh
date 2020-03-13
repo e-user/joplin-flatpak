@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-flatpak-builder --user --install --force-clean --install-deps-from=flathub flatpak-build com.github.laurent22.joplin.json
+flatpak-builder --user --install --install-deps-from=flathub  --force-clean flatpak-build com.github.laurent22.joplin.json
