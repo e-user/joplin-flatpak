@@ -80,24 +80,17 @@
         }
       ],
       "build-commands": [
-        /* */
         /* install modules */
         "echo 'step 1 - install modules'",
-        "npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
-        /* install modules in tools */
-        "echo 'step 2 - install tools'",
-        "npm install --prefix=main/Tools --only=prod --offline --cache=/run/build/joplin/npm-cache/",
-        /* copy react to electron files */
-        "echo 'step 3 - copy electron'",
-        "cp -rv main/ReactNativeClient/lib/ main/ElectronClient/app/lib/", 
-        /* run typescript */
-        "pwd",
-        /* install Electron */
-        "echo 'step 5 - install electron'",
-        "npm install --prefix=main/ElectronClient/app --only=prod --offline --cache=/run/build/joplin/npm-cache/",
-        "mkdir -p /app/main /app/bin",
-        "cp -ra main/ElectronClient/app/dist/linux-unpacked/* /app/main/",
-        "install run.sh /app/bin/"
+        "cd main/Tools && npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+	"echo 'step 2 - install reactnative'",
+        "cd main/ReactNativeClient && npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+	"echo 'step 3 - install ElectronClient'",
+	"cd main/ElectronClient && npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+	"echo 'step 4 - cliclient'",
+	"cd main/CliClient && npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+	"echo 'step 5 - gulp'",
+	"cd main && gulp build"
       ]
     }
   ]
