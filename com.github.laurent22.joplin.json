@@ -40,23 +40,6 @@
       ]
     },
     {
-      "name": "yarn",
-      "buildsystem": "simple",
-      "build-commands": [
-        "mkdir -p /app/share/yarn",
-        "cp -a * /app/share/yarn/",
-        "ln -s /app/share/yarn/bin/yarn /app/bin/yarn",
-        "ln -s /app/share/yarn/bin/yarnpkg /app/bin/yarnpkg"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://github.com/yarnpkg/yarn/releases/download/v1.3.2/yarn-v1.3.2.tar.gz",
-          "sha256": "6cfe82e530ef0837212f13e45c1565ba53f5199eec2527b85ecbcd88bf26821d"
-        }
-      ]
-    },
-    {
       "build-options" : {
         "env": {
           /* Need this for electron-download to find the cached electron binary */
@@ -82,15 +65,15 @@
       "build-commands": [
         /* install modules */
         "echo 'step 1 - install modules'",
-        "cd main/Tools && npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+        "cd main/Tools && npm install --prefix=./ --only=prod --offline --cache=/run/build/joplin/npm-cache/",
 	"echo 'step 2 - install reactnative'",
-        "cd main/ReactNativeClient && npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+        "npm install --prefix=main/ReactNative --only=prod --offline --cache=/run/build/joplin/npm-cache/",
 	"echo 'step 3 - install ElectronClient'",
-	"cd main/ElectronClient && npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+	"npm install --prefix=main/ElectronClient --only=prod --offline --cache=/run/build/joplin/npm-cache/",
 	"echo 'step 4 - cliclient'",
-	"cd main/CliClient && npm install --prefix=main --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+	"npm install --prefix=main/CliClient --only=prod --offline --cache=/run/build/joplin/npm-cache/",
 	"echo 'step 5 - gulp'",
-	"cd main && gulp build"
+	"cd main && ./node_modules/gulp/bin/gulp.js build"
       ]
     }
   ]
