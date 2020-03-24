@@ -43,7 +43,7 @@
       "build-options" : {
         "env": {
           /* Need this for electron-download to find the cached electron binary */
-          "electron_config_cache": "/run/build/joplin/npm-cache"
+          "electron_config_cache": "/run/build/joplin/flatpak-node/npm-cache"
         }
       },
       "name": "joplin",
@@ -65,7 +65,7 @@
       "build-commands": [
         /* install modules */
         "echo 'step 1 - install modules'",
-        "cd main/Tools && npm install --prefix=./ --only=prod --offline --cache=/run/build/joplin/npm-cache/",
+        "cd main/Tools && npm install --prefix=./ --only=prod --offline --cache=/run/build/joplin/flatpak-node/npm-cache/",
 	"echo 'step 2 - install reactnative'",
         "npm install --prefix=main/ReactNative --only=prod --offline --cache=/run/build/joplin/npm-cache/",
 	"echo 'step 3 - install ElectronClient'",
