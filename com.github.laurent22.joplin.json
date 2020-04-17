@@ -50,9 +50,9 @@
       "buildsystem": "simple",
       "sources": [
         {
-          "type": "archive",
-          "url": "https://github.com/laurent22/joplin/archive/v1.0.193.tar.gz",
-          "sha256": "7852ccc25c6345c80222853878f0441cb3522741a0a2c5d641485f2fc9509d87",
+          "type": "git",
+          "url": "https://github.com/laurent22/joplin.git",
+          "tag": "v1.0.201",
           "dest": "main"
         },
         "generated-sources.json",
